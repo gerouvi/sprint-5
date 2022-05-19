@@ -9,8 +9,11 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 const nextButton = document.getElementById('button-next');
+const cardText = document.getElementById('card-text');
 const printJoke = (joke) => {
-    console.log(joke);
+    if (cardText) {
+        cardText.textContent = joke;
+    }
 };
 const getJoke = () => __awaiter(void 0, void 0, void 0, function* () {
     try {

@@ -1,7 +1,10 @@
 const nextButton: HTMLElement | null = document.getElementById('button-next'); 
+const cardText: HTMLElement | null = document.getElementById('card-text');
 
 const printJoke = (joke: string): void => {
-  console.log(joke);
+ if(cardText){
+      cardText.textContent = joke;
+ }
 };
 
 const getJoke = async (): Promise<string> => {
@@ -26,4 +29,3 @@ if(nextButton){
         printJoke(joke);
     });
 }
-
