@@ -42,16 +42,16 @@ const printJoke = (joke) => {
         cardText.textContent = joke;
     }
 };
-const getJoke = () => __awaiter(void 0, void 0, void 0, function* () {
+const getJoke = (url) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const data = yield fetch('https://icanhazdadjoke.com/', {
+        const data = yield fetch(url, {
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json'
             }
         });
         const json = yield data.json();
-        return json.joke;
+        return json.joke || json.value;
     }
     catch (err) {
         throw new Error(err);
@@ -61,7 +61,10 @@ if (nextButton) {
     nextButton.addEventListener('click', () => __awaiter(void 0, void 0, void 0, function* () {
         if (cardText)
             cardText.textContent = 'Carregant...';
-        const joke = yield getJoke();
+        let url = 'https://api.chucknorris.io/jokes/random';
+        if (Math.random() < 0.5)
+            url = 'https://v2.jokeapi.dev/joke/Any?blacklistFlags=nsfw,racist,explicit&type=single';
+        const joke = yield getJoke(url);
         printJoke(joke);
         toggleButtons();
     }));

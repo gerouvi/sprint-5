@@ -42,9 +42,9 @@ const printJoke = (joke: string): void => {
  }
 };
 
-const getJoke = async (): Promise<string> => {
+const getJoke = async (url: string): Promise<string> => {
   try {
-    const data = await fetch('https://icanhazdadjoke.com/', {
+    const data = await fetch(url, {
       headers:{
           'Accept': 'application/json',
           'Content-Type': 'application/json'
@@ -52,18 +52,26 @@ const getJoke = async (): Promise<string> => {
     });
 
     const json = await data.json();
-    return json.joke;
+    return json.joke || json.value;
   } catch (err:unknown) {
     throw new Error(err as string);
   }
 };
 
 if(nextButton){
+  
     nextButton.addEventListener('click', async () => {
       if(cardText) cardText.textContent = 'Carregant...';
-        const joke = await getJoke();
-        printJoke(joke);
-        toggleButtons()
+
+      let url = 'https://api.chucknorris.io/jokes/random'
+
+      if (Math.random() < 0.5) url = 'https://v2.jokeapi.dev/joke/Any?blacklistFlags=nsfw,racist,explicit&type=single'
+
+      const joke = await getJoke(url);
+      printJoke(joke);
+      toggleButtons()
+
+       
     });
 }
 
