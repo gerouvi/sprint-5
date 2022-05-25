@@ -48,3 +48,7 @@ body {
     transform: translateX(-50%);
     bottom: 40px;
 }
+
+.card__score-buttons {
+    text-align: center;
+}

@@ -10,6 +10,28 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 const nextButton = document.getElementById('button-next');
 const cardText = document.getElementById('card-text');
+const buttonScore = document.querySelectorAll('.button-score');
+const buttonNext = document.getElementById('button-next');
+const arrayJokes = [];
+window.addEventListener('load', () => {
+    buttonScore.forEach(el => {
+        const button = el;
+        button.disabled = true;
+    });
+});
+const toggleButtons = () => {
+    buttonScore.forEach((el) => {
+        const button = el;
+        if (button.disabled)
+            button.disabled = false;
+        else
+            button.disabled = true;
+    });
+    if (buttonNext.disabled)
+        buttonNext.disabled = false;
+    else
+        buttonNext.disabled = true;
+};
 const printJoke = (joke) => {
     if (cardText) {
         cardText.textContent = joke;
@@ -32,7 +54,25 @@ const getJoke = () => __awaiter(void 0, void 0, void 0, function* () {
 });
 if (nextButton) {
     nextButton.addEventListener('click', () => __awaiter(void 0, void 0, void 0, function* () {
+        if (cardText)
+            cardText.textContent = 'Carregant...';
         const joke = yield getJoke();
         printJoke(joke);
+        toggleButtons();
     }));
 }
+buttonScore.forEach((el) => {
+    el.addEventListener('click', (e) => {
+        const target = e.target;
+        const d = new Date();
+        let text = d.toISOString();
+        const obj = {
+            joke: (cardText === null || cardText === void 0 ? void 0 : cardText.textContent) || '',
+            score: Number(target.dataset.score),
+            date: text,
+        };
+        arrayJokes.push(obj);
+        console.log(arrayJokes);
+        toggleButtons();
+    });
+});
