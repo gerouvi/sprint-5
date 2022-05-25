@@ -3,6 +3,8 @@ const cardText: HTMLElement | null = document.getElementById('card-text');
 const buttonScore: NodeList = document.querySelectorAll('.button-score');
 const buttonNext = document.getElementById('button-next') as HTMLButtonElement;
 const weatherTemp = document.getElementById('weather-temp') || document.createElement('div');
+const weatherCity = document.getElementById('weather-city')
+const weatherIcon: HTMLImageElement | null  = document.getElementById('weather-icon') as HTMLImageElement
 
 type Joke = {
     joke: string,
@@ -18,13 +20,38 @@ window.addEventListener('load', () => {
     button.disabled = true
   })
 
-  fetch(
+fetch(
   ' https://api.openweathermap.org/data/2.5/weather?lat=41.38879&lon=2.15899&appid=63459ac7ea5ddae1b017926635ec846f'
 )
   .then((res) => res.json())
-  .then((data) => weatherTemp.textContent = data.weather[0].description)
-  .catch(err =>  weatherTemp.textContent = 'Error en el fetch')
+  .then((data) => {
+    if(weatherCity) weatherCity.textContent = data.name
+  
+    const iconCode = data.weather[0].icon;
+
+   weatherTemp.textContent = `${
+      data.main.temp.toFixed() / 10
+    }ºC`;
+    fetch('http://openweathermap.org/img/w/' + iconCode + '.png')
+      .then((res) => res.blob())
+      .then(
+        (img) =>{
+          if(weatherIcon){
+             weatherIcon.src = URL.createObjectURL(img)
+          }
+        }  
+      ).catch(err =>  weatherTemp.textContent = 'Error en el fetch')
+  }).catch(err =>  weatherTemp.textContent = 'Error en el fetch')
 })
+
+const changeBg = () => {
+  const number = Math.floor(Math.random() * 5 + 1);
+  document.documentElement.style.setProperty(
+    '--url',
+    `url('svg${number}.svg')`
+  );
+};
+ 
 
 const toggleButtons = () => {
   buttonScore.forEach((el:Node): void => {
@@ -68,6 +95,7 @@ if(nextButton){
       if (Math.random() < 0.5) url = 'https://v2.jokeapi.dev/joke/Any?blacklistFlags=nsfw,racist,explicit&type=single'
 
       const joke = await getJoke(url);
+      changeBg()
       printJoke(joke);
       toggleButtons()
 
