@@ -2,6 +2,7 @@ const nextButton: HTMLElement | null = document.getElementById('button-next');
 const cardText: HTMLElement | null = document.getElementById('card-text');
 const buttonScore: NodeList = document.querySelectorAll('.button-score');
 const buttonNext = document.getElementById('button-next') as HTMLButtonElement;
+const weatherTemp = document.getElementById('weather-temp') || document.createElement('div');
 
 type Joke = {
     joke: string,
@@ -16,6 +17,13 @@ window.addEventListener('load', () => {
     const button = el as HTMLButtonElement
     button.disabled = true
   })
+
+  fetch(
+  ' https://api.openweathermap.org/data/2.5/weather?lat=41.38879&lon=2.15899&appid=63459ac7ea5ddae1b017926635ec846f'
+)
+  .then((res) => res.json())
+  .then((data) => weatherTemp.textContent = data.weather[0].description)
+  .catch(err =>  weatherTemp.textContent = 'Error en el fetch')
 })
 
 const toggleButtons = () => {
